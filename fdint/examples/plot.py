@@ -12,6 +12,7 @@ sys.path.insert(0,
 import fdint
 
 import warnings
+from past.builtins import xrange
 import numpy
 from numpy import sqrt, exp
 from scipy.integrate import quad
@@ -20,8 +21,11 @@ import matplotlib.pyplot as plt
 INV_SQRT_PI_2 = 1.1283791670955126 # 2/sqrt(pi)
 
 def quad_fdk(k, phi):
-    r = quad(lambda x: (x)**(k)/(1.+exp(x-phi)),
-            0, numpy.inf,epsabs=1e-300,epsrel=1e-8,limit=100)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        def func(x):
+            return (x)**(k)/(1.+exp(x-phi))
+        r = quad(func, 0, numpy.inf,epsabs=1e-300,epsrel=1e-8,limit=100)
     return r[0], r[1]
 
 def quad_gfdk(k, phi, beta):
@@ -29,7 +33,7 @@ def quad_gfdk(k, phi, beta):
         warnings.simplefilter("ignore")
         def func(x):
             return (x)**(k)*sqrt(1+beta*x/2.)/(1.+exp(x-phi))
-    r = quad(func, 0, numpy.inf,epsabs=1e-300,epsrel=1e-8,limit=100)
+        r = quad(func, 0, numpy.inf,epsabs=1e-300,epsrel=1e-8,limit=100)
     return r[0], r[1]
 
 def quad_nonparabolic(phi, alpha):
@@ -37,7 +41,7 @@ def quad_nonparabolic(phi, alpha):
         warnings.simplefilter("ignore")
         def func(x):
             return sqrt(x*(1+alpha*x))*(1+2*alpha*x)/(1.+exp(x-phi))*INV_SQRT_PI_2
-    r = quad(func, 0, numpy.inf,epsabs=1e-300,epsrel=1e-13,limit=100)
+        r = quad(func, 0, numpy.inf,epsabs=1e-300,epsrel=1e-13,limit=100)
     return r[0], r[1]
 
 phi = numpy.linspace(-30,100,1000)
