@@ -29,8 +29,7 @@ Installation
 ============
 
 In order to use FDINT, you must have a working `Python`_ distribution
-installed. Python 3 support has not yet been tested, so Python 2.7 is
-suggested. You will also need to install `Numpy`_ before proceeding. If
+installed. You will also need to install `Numpy`_ before proceeding. If
 you're not familiar with Python, you might consider installing a
 `Python distribution`_ that comes prepackaged with Numpy.
 
